@@ -33,6 +33,7 @@ MultiBot.spells = {}
 MultiBot.frames = {}
 MultiBot.units = {}
 MultiBot.tips = {}
+MultiBot.verbose = false
 
 MultiBot.auto = {}
 MultiBot.auto.sort = false

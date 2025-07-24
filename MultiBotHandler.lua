@@ -116,6 +116,8 @@ MultiBot:SetScript("OnEvent", function()
 		MultiBotSave["Beast"] = MultiBot.IF(MultiBot.frames["MultiBar"].frames["Main"].buttons["Beast"].state, "true", "false")
 		MultiBotSave["Expand"] = MultiBot.IF(MultiBot.frames["MultiBar"].frames["Main"].buttons["Expand"].state, "true", "false")
 		MultiBotSave["RTSC"] = MultiBot.IF(MultiBot.frames["MultiBar"].frames["Main"].buttons["RTSC"].state, "true", "false")
+
+		MultiBotSave["Verbose"] = MultiBot.IF(MultiBot.verbose, "true", "false")
 		
 		return
 	end
@@ -315,6 +317,10 @@ MultiBot:SetScript("OnEvent", function()
 				tButton.doLeft(tButton)
 			end
 		end
+
+		if(MultiBotSave["Verbose"] ~= nil) then
+			MultiBot.verbose = MultiBotSave["Verbose"]=="true" and true or false
+		end
 		
 		return
 	end
@@ -322,10 +328,14 @@ MultiBot:SetScript("OnEvent", function()
 	-- PLAYER:ENTERING --
 	
 	if(event == "PLAYER_ENTERING_WORLD") then
-		SendChatMessage(".account", "SAY")
+		if (MultiBot.verbose) then
+			SendChatMessage(".account", "SAY")
+		end
 		
 		if(MultiBot.init == nil) then
-			SendChatMessage(".playerbot bot list", "SAY")
+			if (MultiBot.verbose) then
+				SendChatMessage(".playerbot bot list", "SAY")
+			end
 			MultiBot.init = true
 			return
 		end
@@ -501,8 +511,10 @@ MultiBot:SetScript("OnEvent", function()
 			
 			if(MultiBot.isMember(tName)) then
 				tButton.waitFor = "CO"
-				SendChatMessage(MultiBot.doReplace(MultiBot.info.combat, "NAME", tName), "SAY")
-				SendChatMessage("co ?", "WHISPER", nil, tName)
+				if (MultiBot.verbose) then 
+					SendChatMessage(MultiBot.doReplace(MultiBot.info.combat, "NAME", tName), "SAY") 
+					SendChatMessage("co ?", "WHISPER", nil, tName)
+				end
 				tButton.setEnable()
 				--MultiBot.doRaid()
 				return
@@ -537,8 +549,10 @@ MultiBot:SetScript("OnEvent", function()
 			local tButton = MultiBot.frames["MultiBar"].frames["Units"].buttons[tName]
 			if(tButton == nil) then return end
 			tButton.waitFor = "CO"
-			SendChatMessage(MultiBot.doReplace(MultiBot.info.combat, "NAME", tName), "SAY")
-			SendChatMessage("co ?", "WHISPER", nil, tName)
+			if (MultiBot.verbose) then
+				SendChatMessage(MultiBot.doReplace(MultiBot.info.combat, "NAME", tName), "SAY") 
+				SendChatMessage("co ?", "WHISPER", nil, tName)
+			end
 			tButton.setEnable()
 			--MultiBot.doRaid()
 			return
@@ -681,8 +695,10 @@ MultiBot:SetScript("OnEvent", function()
 		
 		if(MultiBot.isInside(arg1, "Hello", "你好")) then
 			tButton.waitFor = "CO"
-			SendChatMessage(MultiBot.doReplace(MultiBot.info.combat, "NAME", arg2), "SAY")
-			SendChatMessage("co ?", "WHISPER", nil, arg2)
+			if (MultiBot.verbose) then
+				SendChatMessage(MultiBot.doReplace(MultiBot.info.combat, "NAME", arg2), "SAY") 
+				SendChatMessage("co ?", "WHISPER", nil, arg2)
+			end
 			--MultiBot.doRaid()
 			return
 		end
@@ -931,7 +947,21 @@ SLASH_MULTIBOT1 = "/multibot"
 SLASH_MULTIBOT2 = "/mbot"
 SLASH_MULTIBOT3 = "/mb"
 
-SlashCmdList["MULTIBOT"] = function()
+SlashCmdList["MULTIBOT"] = function(msg)
+	msg = msg:lower()
+	if (msg == "verbose") then
+		MultiBot.verbose = not MultiBot.verbose
+		print("MultiBot - verbosity toggled " .. MultiBot.IF(MultiBot.verbose, "ON", "OFF"))
+		return
+	elseif (msg == "lessverbose" or msg == "less-verbose" or msg == "less verbose" or msg == "verbose 0" or msg == "verbose false") then
+		MultiBot.verbose = false
+		print("MultiBot - verbosity turned OFF")
+		return
+	elseif (msg == "verbose 1" or msg == "verbose true") then
+		MultiBot.verbose = true
+		print("MultiBot - verbosity turned ON")
+		return
+	end
 	if(MultiBot.state) then
 		for key, value in pairs(MultiBot.frames) do value:Hide() end
 		MultiBot.state = false
