@@ -769,8 +769,10 @@ MultiBot:SetScript("OnEvent", function()
 		if(tButton.waitFor == "CO" and MultiBot.isInside(arg1, "Strategies: ")) then
 			tButton.waitFor = "NC"
 			tButton.combat = string.sub(arg1, 13)
-			SendChatMessage(MultiBot.doReplace(MultiBot.info.normal, "NAME", arg2), "SAY")
-			SendChatMessage("nc ?", "WHISPER", nil, arg2)
+			if (MultiBot.verbose) then
+				SendChatMessage(MultiBot.doReplace(MultiBot.info.normal, "NAME", arg2), "SAY")
+				SendChatMessage("nc ?", "WHISPER", nil, arg2)
+			end
 			return
 		end
 		
