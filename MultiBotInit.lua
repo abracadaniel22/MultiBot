@@ -405,7 +405,9 @@ tButton.doRight = function(pButton)
 		return
 	end
 	
-	SendChatMessage(MultiBot.info.group, "SAY")
+	if (MultiBot.verbose) then
+		SendChatMessage(MultiBot.info.group, "SAY")
+	end
 end
 tButton.doLeft = function(pButton)
 	local tName = UnitName("target")

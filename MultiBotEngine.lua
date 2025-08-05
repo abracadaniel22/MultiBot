@@ -417,7 +417,9 @@ MultiBot.ActionToGroup = function(pAction)
 		return true
 	end
 	
-	SendChatMessage(MultiBot.info.group, "SAY")
+	if (MultiBot.verbose) then
+		SendChatMessage(MultiBot.info.group, "SAY")
+	end
 	return false
 end
 
