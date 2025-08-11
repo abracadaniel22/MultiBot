@@ -1,3 +1,5 @@
+# About this fork
+Offers an option switch called "verbose", turned OFF by default. When it's ON, the addon continues to use /say and /whisper the bots for strategies and things like that when they log in. When it's OFF (default), the addon will not use /say and will minimize the amount of times it /whisper bots automatically.
 # MultiBot
 User interface for AzerothCore-Module "Playerbot" by Liyunfan1223.<br>
 Tested with American and German 3.3.5 Wotlk-Client.
